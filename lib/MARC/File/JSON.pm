@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use JSON;
 use JSON::Streaming::Reader;
-use MARC::File::Generic;
+use MARC::Record::Generic;
 use MARC::Record;
 use MARC::File;
 
