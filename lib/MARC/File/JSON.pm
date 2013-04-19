@@ -4,7 +4,7 @@ package MARC::File::JSON;
 
 use strict;
 use warnings;
-use JSON;
+use JSON qw(to_json from_json);
 use JSON::Streaming::Reader;
 use MARC::Record::Generic;
 use MARC::Record;
@@ -16,16 +16,16 @@ push @ISA, 'MARC::File';
 
 # MARC::Record -> JSON
 sub encode {
-    my $record = shift;
-    return JSON->new->utf8->encode( $record->as_generic );
+    my ($record, $args) = @_;
+    return to_json( $record->as_generic, $args );
 }
 
 # JSON -> MARC::Record
 sub decode {
-    my ($self, $data) = @_;
+    my ($self, $data, $args) = @_;
 
     if ( !ref($data) ) {
-        $data = JSON->new->utf8->decode( $data );
+        $data = from_json( $data, $args );
     }
     return MARC::Record->new_from_generic( $data );
 }
@@ -44,13 +44,13 @@ sub _next {
 ### Methods injected into MARC::Record
 
 sub MARC::Record::new_from_json {
-    my ($class, $json) = @_;
-    return __PACKAGE__->decode( JSON->new->utf8->decode($json) );
+    my ($class, $json, $args) = @_;
+    return __PACKAGE__->decode( from_json($json, $args) );
 }
 
 sub MARC::Record::as_json {
-    my $self = shift;
-    return encode( $self );
+    my ($self, $args) = @_;
+    return encode( $self, $args );
 }
 
 1;
