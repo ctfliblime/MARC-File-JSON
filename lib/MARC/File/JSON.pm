@@ -11,7 +11,7 @@ use MARC::Record;
 use MARC::File;
 
 use vars qw( @ISA $VERSION );
-$VERSION = '0.001';
+$VERSION = '0.003';
 push @ISA, 'MARC::File';
 
 # MARC::Record -> JSON
